@@ -1,0 +1,6 @@
+{
+  "name": "SPG11 Research & Clinical Trial Hub",
+  "description": "Comprehensive research awareness portal, patient and caregiver resources, clinical trial updates, and researcher data registry for Spastic Paraplegia Type 11 (SPG11).",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

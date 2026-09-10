@@ -1,0 +1,69 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  }
+}
+
+.font-accessible {
+  font-family: 'Atkinson Hyperlegible', sans-serif !important;
+  letter-spacing: 0.02em;
+  word-spacing: 0.05em;
+  line-height: 1.7;
+}
+
+/* Accessibility font size scaling classes */
+.text-scale-normal {
+  font-size: 100%;
+}
+
+.text-scale-large {
+  font-size: 115%;
+}
+
+.text-scale-xlarge {
+  font-size: 130%;
+}
+
+/* High Contrast Mode */
+.high-contrast-mode {
+  --bg-main: #000000;
+  --text-main: #ffffff;
+  --accent-color: #ffd700;
+  background-color: #000000 !important;
+  color: #ffffff !important;
+}
+
+.high-contrast-mode .bg-white,
+.high-contrast-mode .bg-slate-50,
+.high-contrast-mode .bg-slate-100 {
+  background-color: #121212 !important;
+  color: #ffffff !important;
+  border-color: #ffffff !important;
+}
+
+.high-contrast-mode .text-slate-600,
+.high-contrast-mode .text-slate-500,
+.high-contrast-mode .text-slate-400 {
+  color: #e2e8f0 !important;
+}
+
+.high-contrast-mode button,
+.high-contrast-mode a {
+  outline-color: #ffd700 !important;
+}
+
+/* Print styles for Emergency Medical Card */
+@media print {
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .print-only {
+    display: block !important;
+  }
+}
