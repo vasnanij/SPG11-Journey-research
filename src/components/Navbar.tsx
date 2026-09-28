@@ -1,26 +1,29 @@
 import React, { useState } from 'react';
-import { Activity, FileText, FlaskConical, LifeBuoy, Menu, X, Dna, AlertTriangle, ShieldCheck } from 'lucide-react';
+import { Activity, FileText, FlaskConical, LifeBuoy, Menu, X, Dna, AlertTriangle, ShieldCheck, ClipboardList } from 'lucide-react';
 
 interface Props {
   activeSection: string;
   onNavigate: (sectionId: string) => void;
   onOpenWalletCard: () => void;
+  onOpenSitemap?: () => void;
 }
 
 export const Navbar: React.FC<Props> = ({
   activeSection,
   onNavigate,
   onOpenWalletCard,
+  onOpenSitemap,
 }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const navItems = [
-    { id: 'overview', label: 'About SPG11', icon: Dna },
-    { id: 'pathology', label: 'Cellular Biology', icon: Activity },
-    { id: 'trials', label: 'Clinical Trials', icon: FlaskConical },
-    { id: 'resources', label: 'Patient & Caregiver', icon: LifeBuoy },
-    { id: 'submit-data', label: 'Researcher Portal', icon: FileText },
-    { id: 'glossary', label: 'Glossary & FAQ', icon: ShieldCheck },
+    { id: 'about', label: 'About', icon: Dna, path: '/about' },
+    { id: 'features', label: 'Features', icon: Activity, path: '/features' },
+    { id: 'how-it-works', label: 'How It Works', icon: ClipboardList, path: '/how-it-works' },
+    { id: 'trials', label: 'Trials', icon: FlaskConical, path: '/trials' },
+    { id: 'faq', label: 'FAQ', icon: ShieldCheck, path: '/faq' },
+    { id: 'blog', label: 'Blog', icon: FileText, path: '/blog' },
+    { id: 'contact', label: 'Contact', icon: LifeBuoy, path: '/contact' },
   ];
 
   const handleItemClick = (id: string) => {
@@ -96,6 +99,18 @@ export const Navbar: React.FC<Props> = ({
 
           {/* Right Action CTAs */}
           <div className="hidden sm:flex items-center gap-2">
+            {onOpenSitemap && (
+              <button
+                id="btn-nav-sitemap"
+                type="button"
+                onClick={onOpenSitemap}
+                className="flex items-center gap-1.5 px-2.5 py-2 rounded-md text-xs font-semibold text-slate-700 hover:text-teal-700 hover:bg-slate-100 transition"
+                title="View Sitemap XML Directory"
+              >
+                <span className="font-mono text-[11px] bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200">/sitemap.xml</span>
+              </button>
+            )}
+
             <button
               id="btn-nav-emergency-card"
               type="button"
@@ -177,6 +192,19 @@ export const Navbar: React.FC<Props> = ({
           })}
 
           <div className="pt-3 border-t border-slate-100 flex flex-col gap-2">
+            {onOpenSitemap && (
+              <button
+                id="mobile-btn-sitemap"
+                type="button"
+                onClick={() => {
+                  onOpenSitemap();
+                  setIsMobileMenuOpen(false);
+                }}
+                className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-md text-xs font-semibold bg-slate-100 text-slate-800 border border-slate-200"
+              >
+                <span>Sitemap Directory (/sitemap.xml)</span>
+              </button>
+            )}
             <button
               id="mobile-btn-emergency"
               type="button"

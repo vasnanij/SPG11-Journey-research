@@ -4,11 +4,55 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SPG11 Research & Clinical Trial Hub</title>
+
+    <!-- Window fetch property setter shim for sandboxed iframe environments -->
+    <script>
+      (function () {
+        try {
+          var originalFetch = window.fetch;
+          var fetchHandler = originalFetch;
+
+          var proto = window.Window ? window.Window.prototype : Object.getPrototypeOf(window);
+          if (proto) {
+            try {
+              var protoDesc = Object.getOwnPropertyDescriptor(proto, 'fetch');
+              if (protoDesc && !protoDesc.set && protoDesc.configurable) {
+                Object.defineProperty(proto, 'fetch', {
+                  get: function () {
+                    return fetchHandler;
+                  },
+                  set: function (newFn) {
+                    fetchHandler = newFn;
+                  },
+                  configurable: true,
+                  enumerable: true,
+                });
+              }
+            } catch (_) {}
+          }
+
+          var winDesc = Object.getOwnPropertyDescriptor(window, 'fetch');
+          if (!winDesc || !winDesc.set) {
+            Object.defineProperty(window, 'fetch', {
+              get: function () {
+                return fetchHandler;
+              },
+              set: function (newFn) {
+                fetchHandler = newFn;
+              },
+              configurable: true,
+              enumerable: true,
+            });
+          }
+        } catch (_) {}
+      })();
+    </script>
     <meta name="description" content="Comprehensive research awareness portal, patient and caregiver resources, clinical trial updates, and researcher data registry for Spastic Paraplegia Type 11 (SPG11)." />
     <meta name="keywords" content="SPG11, Spastic Paraplegia 11, Spatacsin, KIAA1840, Hereditary Spastic Paraplegia with Thin Corpus Callosum, HSP, clinical trials, patient resources, caregiver guide, rare neurodegenerative disease, autophagic lysosome reformation" />
     <meta name="author" content="SPG11 Global Research Alliance" />
     <meta name="robots" content="index, follow" />
-    <link rel="canonical" href="https://ais-pre-rbes3uewxqo6yuc6w3bc7f-972420753280.asia-southeast1.run.app" />
+    <link rel="canonical" href="https://www.spg11journey.com" />
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
 
     <!-- Open Graph / Social Media -->
     <meta property="og:title" content="SPG11 Research & Clinical Trial Hub" />

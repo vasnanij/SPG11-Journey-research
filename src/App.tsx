@@ -7,6 +7,14 @@ import { ClinicalTrialTracker } from './components/ClinicalTrialTracker';
 import { PatientResourcesSection } from './components/PatientResourcesSection';
 import { ResearcherSubmissionForm } from './components/ResearcherSubmissionForm';
 import { SeoGlossaryFaq } from './components/SeoGlossaryFaq';
+import { Spg11JourneyTracker } from './components/Spg11JourneyTracker';
+import { AboutSection } from './components/AboutSection';
+import { FeaturesSection } from './components/FeaturesSection';
+import { HowItWorksSection } from './components/HowItWorksSection';
+import { BlogSection } from './components/BlogSection';
+import { ContactSection } from './components/ContactSection';
+import { SitemapModal } from './components/SitemapModal';
+import { RobotsTxtModal } from './components/RobotsTxtModal';
 import { Footer } from './components/Footer';
 import { RESEARCH_PUBLICATIONS } from './data/spg11Data';
 import { 
@@ -23,7 +31,8 @@ import {
   Microscope,
   Calendar,
   Layers,
-  Sparkles
+  Sparkles,
+  ClipboardList
 } from 'lucide-react';
 
 export default function App() {
@@ -48,6 +57,8 @@ export default function App() {
   // Navigation & View States
   const [activeSection, setActiveSection] = useState('overview');
   const [walletCardOpen, setWalletCardOpen] = useState(false);
+  const [sitemapOpen, setSitemapOpen] = useState(false);
+  const [robotsTxtOpen, setRobotsTxtOpen] = useState(false);
   const [selectedPub, setSelectedPub] = useState<string | null>(null);
 
   // Persist accessibility settings
@@ -58,6 +69,27 @@ export default function App() {
       console.error('Failed to save settings', e);
     }
   }, [settings]);
+
+  // URL route synchronization (/about, /features, /how-it-works, /faq, /blog, /contact, /sitemap.xml, /robots.txt)
+  useEffect(() => {
+    const handleUrlRoute = () => {
+      const path = window.location.pathname.replace(/^\/+/, '').toLowerCase();
+      const hash = window.location.hash.replace(/^#+/, '').toLowerCase();
+      const route = path || hash;
+
+      if (route === 'sitemap.xml' || route === 'sitemap') {
+        setSitemapOpen(true);
+      } else if (route === 'robots.txt' || route === 'robots') {
+        setRobotsTxtOpen(true);
+      } else if (route) {
+        handleNavigate(route, false);
+      }
+    };
+
+    handleUrlRoute();
+    window.addEventListener('popstate', handleUrlRoute);
+    return () => window.removeEventListener('popstate', handleUrlRoute);
+  }, []);
 
   const handleUpdateSettings = (newSettings: Partial<AccessibilitySettings>) => {
     setSettings((prev) => ({ ...prev, ...newSettings }));
@@ -72,11 +104,47 @@ export default function App() {
     });
   };
 
-  const handleNavigate = (sectionId: string) => {
+  const handleNavigate = (sectionId: string, updateHistory = true) => {
+    if (sectionId === 'sitemap.xml' || sectionId === 'sitemap') {
+      setSitemapOpen(true);
+      if (updateHistory && window.history && window.history.pushState) {
+        try {
+          window.history.pushState(null, '', '/sitemap.xml');
+        } catch (_) {}
+      }
+      return;
+    }
+
+    if (sectionId === 'robots.txt' || sectionId === 'robots') {
+      setRobotsTxtOpen(true);
+      if (updateHistory && window.history && window.history.pushState) {
+        try {
+          window.history.pushState(null, '', '/robots.txt');
+        } catch (_) {}
+      }
+      return;
+    }
+
     setActiveSection(sectionId);
-    const element = document.getElementById(
+
+    if (updateHistory && window.history && window.history.pushState) {
+      try {
+        const newPath = sectionId === 'overview' ? '/' : `/${sectionId}`;
+        window.history.pushState(null, '', newPath);
+      } catch (_) {}
+    }
+
+    const targetElementId = 
       sectionId === 'overview'
         ? 'main-content'
+        : sectionId === 'about'
+        ? 'about-section'
+        : sectionId === 'features'
+        ? 'features-section'
+        : sectionId === 'how-it-works'
+        ? 'how-it-works-section'
+        : sectionId === 'journey'
+        ? 'journey-tracker-section'
         : sectionId === 'pathology'
         ? 'pathology-section'
         : sectionId === 'trials'
@@ -85,10 +153,15 @@ export default function App() {
         ? 'resources-section'
         : sectionId === 'submit-data'
         ? 'submit-data-section'
-        : sectionId === 'glossary'
+        : sectionId === 'faq' || sectionId === 'glossary'
         ? 'glossary-section'
-        : 'main-content'
-    );
+        : sectionId === 'blog'
+        ? 'blog-section'
+        : sectionId === 'contact'
+        ? 'contact-section'
+        : 'main-content';
+
+    const element = document.getElementById(targetElementId);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
     }
@@ -125,6 +198,7 @@ export default function App() {
           setWalletCardOpen(true);
           handleNavigate('resources');
         }}
+        onOpenSitemap={() => setSitemapOpen(true)}
       />
 
       {/* Main Content Area */}
@@ -164,14 +238,24 @@ export default function App() {
               {/* Action Buttons */}
               <div className="pt-3 flex flex-wrap items-center gap-3">
                 <button
+                  id="hero-btn-journey-tracker"
+                  type="button"
+                  onClick={() => handleNavigate('journey')}
+                  className="flex items-center gap-2 px-5 py-3 rounded-xl bg-teal-600 hover:bg-teal-500 text-white font-bold text-sm transition shadow-sm hover:shadow-md"
+                >
+                  <ClipboardList className="w-4 h-4" />
+                  <span>Your SPG11 Journey Tracker</span>
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+
+                <button
                   id="hero-btn-explore-trials"
                   type="button"
                   onClick={() => handleNavigate('trials')}
-                  className="flex items-center gap-2 px-5 py-3 rounded-xl bg-teal-600 hover:bg-teal-500 text-white font-bold text-sm transition shadow-sm hover:shadow-md"
+                  className="flex items-center gap-2 px-5 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-100 font-semibold text-sm border border-slate-700 transition"
                 >
-                  <FlaskConical className="w-4 h-4" />
-                  <span>Explore Clinical Trials</span>
-                  <ArrowRight className="w-4 h-4" />
+                  <FlaskConical className="w-4 h-4 text-teal-400" />
+                  <span>Clinical Trials</span>
                 </button>
 
                 <button
@@ -242,6 +326,26 @@ export default function App() {
             </div>
           </div>
         </section>
+
+        {/* ROUTE /about: ABOUT SPG11, GENETICS & RESEARCH ALLIANCE */}
+        <AboutSection
+          plainLanguageMode={settings.plainLanguageMode}
+          onNavigate={handleNavigate}
+        />
+
+        {/* ROUTE /features: PLATFORM CAPABILITIES & INTERACTIVE LAUNCHERS */}
+        <FeaturesSection
+          onNavigate={handleNavigate}
+          onOpenWalletCard={() => setWalletCardOpen(true)}
+        />
+
+        {/* ROUTE /how-it-works: ONBOARDING & LONGITUDINAL PROTOCOLS */}
+        <HowItWorksSection
+          onNavigate={handleNavigate}
+        />
+
+        {/* PRIMARY SECTION: SPG11 JOURNEY TRACKER & RECORDS ORGANIZER */}
+        <Spg11JourneyTracker plainLanguageMode={settings.plainLanguageMode} />
 
         {/* SECTION 1: CELLULAR PATHOLOGY & MOLECULAR VISUALIZER */}
         <CellularMechanismVisualizer plainLanguageMode={settings.plainLanguageMode} />
@@ -320,7 +424,13 @@ export default function App() {
         {/* SECTION 4: RESEARCHER DATA SUBMISSION PORTAL & CONTACT FORM */}
         <ResearcherSubmissionForm plainLanguageMode={settings.plainLanguageMode} />
 
-        {/* SECTION 5: SEO GLOSSARY & FREQUENTLY ASKED QUESTIONS */}
+        {/* ROUTE /blog: SCIENTIFIC DISPATCHES & RESEARCH BLOG */}
+        <BlogSection onNavigate={handleNavigate} />
+
+        {/* ROUTE /contact: DIRECT COLLABORATION & INQUIRY FORM */}
+        <ContactSection plainLanguageMode={settings.plainLanguageMode} />
+
+        {/* ROUTE /faq: SEO GLOSSARY & FREQUENTLY ASKED QUESTIONS */}
         <SeoGlossaryFaq plainLanguageMode={settings.plainLanguageMode} />
 
       </main>
@@ -332,6 +442,22 @@ export default function App() {
           setWalletCardOpen(true);
           handleNavigate('resources');
         }}
+        onOpenSitemap={() => setSitemapOpen(true)}
+        onOpenRobotsTxt={() => setRobotsTxtOpen(true)}
+      />
+
+      {/* 4. Interactive Sitemap Modal (/sitemap.xml) */}
+      <SitemapModal
+        isOpen={sitemapOpen}
+        onClose={() => setSitemapOpen(false)}
+        onNavigate={handleNavigate}
+      />
+
+      {/* 5. Interactive Robots.txt Modal (/robots.txt) */}
+      <RobotsTxtModal
+        isOpen={robotsTxtOpen}
+        onClose={() => setRobotsTxtOpen(false)}
+        onOpenSitemap={() => setSitemapOpen(true)}
       />
 
     </div>

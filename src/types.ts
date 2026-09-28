@@ -99,3 +99,66 @@ export interface MedicalTermGlossary {
   clinicalRelevance: string;
   category: 'Genetics' | 'Neuroimaging' | 'Symptoms' | 'Therapeutics';
 }
+
+export type JourneyEntryCategory = 
+  | 'Symptom Check-in' 
+  | 'Milestone' 
+  | 'Clinical Visit' 
+  | 'Physical Therapy' 
+  | 'Medication Change' 
+  | 'Diagnostic / Lab';
+
+export interface JourneyEntry {
+  id: string;
+  date: string;
+  category: JourneyEntryCategory;
+  title: string;
+  notes: string;
+  spasticitySeverity: number; // 1 to 10 scale
+  mobilityStatus: string;
+  speechBulbarNotes?: string;
+  cognitiveNotes?: string;
+  attendingNeurologist?: string;
+  recommendations?: string;
+  tags: string[];
+}
+
+export type DocumentCategory = 
+  | 'Genetic Report' 
+  | 'Brain MRI' 
+  | 'Trial Consent' 
+  | 'Caregiver Plan' 
+  | 'IEP / Accommodation' 
+  | 'Lab Result';
+
+export interface JourneyDocument {
+  id: string;
+  title: string;
+  category: DocumentCategory;
+  date: string;
+  fileName: string;
+  fileSize: string;
+  fileType: string;
+  notes: string;
+  keyFindings: string;
+}
+
+export interface JourneyMemory {
+  id: string;
+  title: string;
+  date: string;
+  caption: string;
+  emotionalTag: 'Triumph & Milestone' | 'Adaptive Victory' | 'Family & Joy' | 'Therapy Progress' | 'Daily Memory';
+  imageUrl: string;
+  location?: string;
+}
+
+export interface JourneyProfile {
+  accountType: 'patient' | 'caregiver' | 'clinician';
+  name: string;
+  patientAge: string;
+  diagnosisYear: string;
+  geneticVariant: string;
+  primaryHospital: string;
+  emergencyContact: string;
+}
