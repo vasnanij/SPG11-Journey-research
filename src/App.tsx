@@ -12,11 +12,14 @@ import { AboutSection } from './components/AboutSection';
 import { FeaturesSection } from './components/FeaturesSection';
 import { HowItWorksSection } from './components/HowItWorksSection';
 import { BlogSection } from './components/BlogSection';
+import { BlogListing } from './components/BlogListing';
+import { BlogArticlePage } from './components/BlogArticlePage';
 import { ContactSection } from './components/ContactSection';
 import { SitemapModal } from './components/SitemapModal';
 import { RobotsTxtModal } from './components/RobotsTxtModal';
 import { Footer } from './components/Footer';
 import { RESEARCH_PUBLICATIONS } from './data/spg11Data';
+import { BLOG_POSTS } from './data/blogData';
 import { 
   Dna, 
   FlaskConical, 
@@ -56,6 +59,7 @@ export default function App() {
 
   // Navigation & View States
   const [activeSection, setActiveSection] = useState('overview');
+  const [activeBlogSlug, setActiveBlogSlug] = useState<string | null>(null);
   const [walletCardOpen, setWalletCardOpen] = useState(false);
   const [sitemapOpen, setSitemapOpen] = useState(false);
   const [robotsTxtOpen, setRobotsTxtOpen] = useState(false);
@@ -70,19 +74,36 @@ export default function App() {
     }
   }, [settings]);
 
-  // URL route synchronization (/about, /features, /how-it-works, /faq, /blog, /contact, /sitemap.xml, /robots.txt)
+  // URL route synchronization (/about, /features, /how-it-works, /faq, /blog, /blog/:slug, /contact, /sitemap.xml, /robots.txt)
   useEffect(() => {
     const handleUrlRoute = () => {
-      const path = window.location.pathname.replace(/^\/+/, '').toLowerCase();
-      const hash = window.location.hash.replace(/^#+/, '').toLowerCase();
-      const route = path || hash;
+      const rawPath = window.location.pathname.replace(/^\/+/, '');
+      const rawHash = window.location.hash.replace(/^#+/, '');
+      const route = (rawPath || rawHash).toLowerCase();
 
       if (route === 'sitemap.xml' || route === 'sitemap') {
         setSitemapOpen(true);
       } else if (route === 'robots.txt' || route === 'robots') {
         setRobotsTxtOpen(true);
+      } else if (route.startsWith('blog/')) {
+        const slug = route.replace(/^blog\//, '').replace(/\/$/, '');
+        const matched = BLOG_POSTS.find((p) => p.slug.toLowerCase() === slug || p.id.toLowerCase() === slug);
+        if (matched) {
+          setActiveBlogSlug(matched.slug);
+          setActiveSection('blog-article');
+        } else {
+          setActiveBlogSlug(null);
+          setActiveSection('blog');
+        }
+      } else if (route === 'blog') {
+        setActiveBlogSlug(null);
+        setActiveSection('blog');
       } else if (route) {
+        setActiveBlogSlug(null);
         handleNavigate(route, false);
+      } else {
+        setActiveBlogSlug(null);
+        setActiveSection('overview');
       }
     };
 
@@ -102,6 +123,42 @@ export default function App() {
       dyslexiaFont: false,
       plainLanguageMode: true,
     });
+  };
+
+  const handleSelectArticle = (slug: string) => {
+    const matched = BLOG_POSTS.find((p) => p.slug === slug || p.id === slug);
+    if (matched) {
+      setActiveBlogSlug(matched.slug);
+      setActiveSection('blog-article');
+      if (window.history && window.history.pushState) {
+        try {
+          window.history.pushState(null, '', `/blog/${matched.slug}`);
+        } catch (_) {}
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  const handleNavigateBlogListing = () => {
+    setActiveBlogSlug(null);
+    setActiveSection('blog');
+    if (window.history && window.history.pushState) {
+      try {
+        window.history.pushState(null, '', '/blog');
+      } catch (_) {}
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleNavigateHome = () => {
+    setActiveBlogSlug(null);
+    setActiveSection('overview');
+    if (window.history && window.history.pushState) {
+      try {
+        window.history.pushState(null, '', '/');
+      } catch (_) {}
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleNavigate = (sectionId: string, updateHistory = true) => {
@@ -125,6 +182,18 @@ export default function App() {
       return;
     }
 
+    if (sectionId === 'blog') {
+      handleNavigateBlogListing();
+      return;
+    }
+
+    if (sectionId.startsWith('blog/')) {
+      const slug = sectionId.replace(/^blog\//, '');
+      handleSelectArticle(slug);
+      return;
+    }
+
+    setActiveBlogSlug(null);
     setActiveSection(sectionId);
 
     if (updateHistory && window.history && window.history.pushState) {
@@ -203,9 +272,49 @@ export default function App() {
 
       {/* Main Content Area */}
       <main id="main-content" className="flex-1" tabIndex={-1}>
-        
-        {/* HERO SECTION */}
-        <section className="relative overflow-hidden bg-linear-to-b from-slate-900 via-slate-900 to-slate-950 text-white py-14 sm:py-20 border-b border-slate-800">
+        {activeSection === 'blog-article' && activeBlogSlug ? (
+          (() => {
+            const currentArticle = BLOG_POSTS.find(
+              (p) => p.slug.toLowerCase() === activeBlogSlug.toLowerCase() || p.id === activeBlogSlug
+            );
+            if (currentArticle) {
+              return (
+                <BlogArticlePage
+                  article={currentArticle}
+                  onNavigateHome={handleNavigateHome}
+                  onNavigateBlog={handleNavigateBlogListing}
+                  onSelectArticle={handleSelectArticle}
+                  onNavigateSection={(sec) => {
+                    setActiveBlogSlug(null);
+                    handleNavigate(sec);
+                  }}
+                />
+              );
+            }
+            return (
+              <BlogListing
+                onSelectArticle={handleSelectArticle}
+                onNavigateHome={handleNavigateHome}
+                onNavigateSection={(sec) => {
+                  setActiveBlogSlug(null);
+                  handleNavigate(sec);
+                }}
+              />
+            );
+          })()
+        ) : activeSection === 'blog' ? (
+          <BlogListing
+            onSelectArticle={handleSelectArticle}
+            onNavigateHome={handleNavigateHome}
+            onNavigateSection={(sec) => {
+              setActiveBlogSlug(null);
+              handleNavigate(sec);
+            }}
+          />
+        ) : (
+          <>
+            {/* HERO SECTION */}
+            <section className="relative overflow-hidden bg-linear-to-b from-slate-900 via-slate-900 to-slate-950 text-white py-14 sm:py-20 border-b border-slate-800">
           {/* Subtle geometric background accents */}
           <div className="absolute inset-0 opacity-10 pointer-events-none bg-[radial-gradient(#14b8a6_1px,transparent_1px)] [background-size:24px_24px]" />
 
@@ -425,14 +534,18 @@ export default function App() {
         <ResearcherSubmissionForm plainLanguageMode={settings.plainLanguageMode} />
 
         {/* ROUTE /blog: SCIENTIFIC DISPATCHES & RESEARCH BLOG */}
-        <BlogSection onNavigate={handleNavigate} />
+        <BlogSection
+          onNavigate={handleNavigate}
+          onSelectArticle={handleSelectArticle}
+        />
 
         {/* ROUTE /contact: DIRECT COLLABORATION & INQUIRY FORM */}
         <ContactSection plainLanguageMode={settings.plainLanguageMode} />
 
         {/* ROUTE /faq: SEO GLOSSARY & FREQUENTLY ASKED QUESTIONS */}
         <SeoGlossaryFaq plainLanguageMode={settings.plainLanguageMode} />
-
+          </>
+        )}
       </main>
 
       {/* 3. Site Footer */}

@@ -6,7 +6,7 @@
   <!-- Homepage / Core Portal -->
   <url>
     <loc>https://www.spg11journey.com/</loc>
-    <lastmod>2026-09-28</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -14,7 +14,7 @@
   <!-- About SPG11 & Research Alliance -->
   <url>
     <loc>https://www.spg11journey.com/about</loc>
-    <lastmod>2026-09-28</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
@@ -22,7 +22,7 @@
   <!-- Features & Interactive Clinical Tools -->
   <url>
     <loc>https://www.spg11journey.com/features</loc>
-    <lastmod>2026-09-28</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
@@ -30,7 +30,7 @@
   <!-- How It Works: Journey Tracker & Data Submission Workflow -->
   <url>
     <loc>https://www.spg11journey.com/how-it-works</loc>
-    <lastmod>2026-09-28</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -38,23 +38,85 @@
   <!-- Medical Term Glossary & Caregiver FAQ -->
   <url>
     <loc>https://www.spg11journey.com/faq</loc>
-    <lastmod>2026-09-28</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
 
-  <!-- Scientific Blog & Clinical Updates -->
+  <!-- Blog Listing Page -->
   <url>
     <loc>https://www.spg11journey.com/blog</loc>
-    <lastmod>2026-09-28</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- 10 Individual Blog Articles -->
+  <url>
+    <loc>https://www.spg11journey.com/blog/what-is-an-spg11-journey-tracker-and-how-does-it-work</loc>
+    <lastmod>2026-10-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.spg11journey.com/blog/how-to-organize-your-spg11-journey-information-digitally</loc>
+    <lastmod>2026-10-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.spg11journey.com/blog/why-keeping-an-spg11-journey-journal-can-be-helpful</loc>
+    <lastmod>2026-10-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.spg11journey.com/blog/how-to-keep-your-spg11-records-organized-in-one-place</loc>
+    <lastmod>2026-10-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.spg11journey.com/blog/digital-tools-for-documenting-an-spg11-journey</loc>
+    <lastmod>2026-10-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.spg11journey.com/blog/what-information-can-you-keep-in-an-spg11-journey-tracker</loc>
+    <lastmod>2026-10-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.spg11journey.com/blog/how-to-create-a-simple-spg11-journey-timeline</loc>
+    <lastmod>2026-10-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.spg11journey.com/blog/a-beginners-guide-to-using-an-spg11-journey-tracker</loc>
+    <lastmod>2026-10-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.spg11journey.com/blog/how-families-can-organize-important-spg11-journey-information</loc>
+    <lastmod>2026-10-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.spg11journey.com/blog/spg11-journey-documentation-a-simple-digital-approach</loc>
+    <lastmod>2026-10-02</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <!-- Contact & Research Registry Collaboration -->
   <url>
     <loc>https://www.spg11journey.com/contact</loc>
-    <lastmod>2026-09-28</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
